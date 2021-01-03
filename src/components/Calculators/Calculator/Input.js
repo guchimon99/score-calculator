@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { useCalculator } from '../../../hooks/entities'
@@ -9,15 +10,13 @@ const Input = ({ match: { params: { calculatorId } }, history }) => {
 
   const { register, handleSubmit } = useForm()
 
-  const onSubmit = (data) => {
-    history.push(`/calculators/${calculatorId}/result`, data)
-  }
+  const onSubmit = useCallback(data => history.push(`/calculators/${calculatorId}/result`, data), [])
 
   return (
     <>
       <Header
         title={`${calculator.title}`}
-        parent={'/me/calculators'}
+        parent={'/'}
         info={`/calculators/${calculatorId}/info`} />
       <form className="max-w-2xl mx-auto pt-16" onSubmit={handleSubmit(onSubmit)}>
         {calculator.inputs.map((input, iIndex) => (
