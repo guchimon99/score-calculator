@@ -11,9 +11,20 @@ const Input = () => {
   }, [])
 
   return (
-    <form onSubmit={handleSubmit(onValid)} className="border-b p-2">
-      <input className="border rounded w-full p-2 bg-gray-100" name="keyword" type="text" ref={register}/>
-    </form>
+    <>
+      <div className="fixed top-0 left-0 right-0 border-b-2 h-12">
+        <form onSubmit={handleSubmit(onValid)} className="max-w-2xl mx-auto p-2">
+          <input
+            name="keyword" type="text" placeholder="計算機を探す"
+            className="border rounded w-full py-1 px-2 bg-gray-100"
+            ref={register} />
+        </form>
+      </div>
+      <div className="py-12 max-w-2xl mx-auto min-h-screen">
+
+      </div>
+    </>
+
   )
 }
 
