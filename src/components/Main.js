@@ -13,6 +13,7 @@ const Main = () => {
   const isReady = useIsReady()
 
   if (!isReady) return null
+
   return (
     <Router>
       <Switch>
