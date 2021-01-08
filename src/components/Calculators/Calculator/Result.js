@@ -16,7 +16,9 @@ import {
 import Container from '../../Layout/Container'
 import { useCallback } from 'react'
 
-const About = styled.div`
+const About = styled.div.attrs(() => ({
+  className: 'mb-2'
+}))`
   position: sticky;
   top: 0;
   bottom: 0;
@@ -103,8 +105,8 @@ const Result = () => {
         <table className="w-full table-fixed border-collapse mb-4">
           <thead>
             <tr>
-              <th className="font-normal text-sm w-20 p-1 border-b-2">スコア</th>
-              <th className="font-normal text-sm w-full p-1 border-b-2">評価</th>
+              <th className="font-normal text-sm w-20 px-1 py-2 border-b-2">スコア</th>
+              <th className="font-normal text-sm w-full px-1 py-2 border-b-2">評価</th>
             </tr>
           </thead>
           <tbody>
