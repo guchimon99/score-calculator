@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from './Link'
 
 const NotFound = ({ location }) => (
   <div className="py-8 px-4 max-w-2xl mx-auto">

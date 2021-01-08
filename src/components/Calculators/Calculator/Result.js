@@ -1,161 +1,142 @@
-import { useEffect, useState } from 'react'
-import { Redirect } from 'react-router-dom'
-import * as Icons from 'react-feather'
+import styled from 'styled-components'
 
-import { useResult } from '../../../hooks/calculator'
-import { useCalculator } from '../../../hooks/entities'
+import { operatorToSymbol } from '../../../services/calcurator'
 
-import Header from './Header'
+import {
+  useTitle,
+  useEvalutionTitle,
+  useEvalutions,
+  useReferences,
+  useScore,
+  useProgress,
+  useEvalutionIndex,
+  useResetValues
+} from '../../../hooks/calculator'
 
-const operatorToSymbol = operator => {
-  switch (operator) {
-    case 'less':
-      return '<'
-    case 'less than or equal':
-      return '≦'
-    case 'equal':
-      return ''
-    case 'greater than or equal':
-      return '≧'
-    case 'greater':
-      return '>'
-    default:
-      return false
+import Container from '../../Layout/Container'
+import { useCallback } from 'react'
+
+const About = styled.div`
+  position: sticky;
+  top: 0;
+  bottom: 0;
+`
+
+const ProgressBar = styled.div.attrs(() => ({
+  className: 'bg-blue-500'
+}))`
+  min-width: 0.1rem;
+  max-width: 100%;
+  width: ${({ progress }) => progress * 100}%;
+  transition: width .3s ease;
+`
+
+const Score = styled.div.attrs(({ isFixed }) => {
+  const classNames = []
+
+  if (isFixed) {
+    classNames.push('font-bold text-gray-900 text-2xl')
+  } else {
+    classNames.push('text-gray-400 text-xl')
   }
-}
 
-const Result = ({ location: { state: inputs, pathname }, match: { params: { calculatorId } } }) => {
-  const calculator = useCalculator(calculatorId)
-  const { score, quality } = useResult(calculator, inputs)
-  const [isOpenBreakdown, setIsOpenBreakdown] = useState(false)
+  return { className: classNames.join(' ') }
+})`
+  transition-property: color;
+  transition-duration: .25s;
+  transition-timing-function: ease;
+`
 
-  useEffect(() => {
+const Evalution = styled.tr.attrs(({ isFixed, isSelected }) => {
+  const classNames = ['broder-b']
+
+  if (isFixed) {
+    if (isSelected) {
+      classNames.push('font-bold text-lg bg-gray-100')
+    } else {
+      classNames.push('text-gray-500 text-sm')
+    }
+  }
+
+  return { className: classNames.join(' ') }
+})`
+  transition-property: background-color color;
+  transition-duration: .25s;
+  transition-timing-function: ease;
+`
+
+const Result = () => {
+  const title = useTitle()
+  const evalutionTitle = useEvalutionTitle()
+  const evalutions = useEvalutions()
+  const references = useReferences()
+  const progress = useProgress()
+  const evalutionIndex = useEvalutionIndex()
+  const score = useScore()
+  const resetValues = useResetValues()
+
+  const retrtHandler = useCallback(() => {
+    resetValues()
     window.scrollTo(0, 0)
-  }, [pathname])
-
-  if (!inputs) return <Redirect to={`/calculators/${calculatorId}`} />
+  }, [resetValues])
 
   return (
     <>
-      <Header
-        title={`${calculator.title} の結果`}
-        parent={`/calculators/${calculatorId}`}
-        info={`/calculators/${calculatorId}/info`} />
-      <div className="max-w-2xl mx-auto py-16">
-        <div className="pl-4 border-b pb-4 mb-4">
-          <div className="text-xl mb-3">結果</div>
-          <div className="pl-4">
-            <div className="mb-4 border-b pb-2 pl-2 px-4">
-              <div className="mb-2 text-lg">{calculator.qualityTitle}</div>
-              <div className="text-right text-xl">{quality.label}</div>
+      <About className="bg-white border-b">
+        <div className="h-2 bg-gray-200 flex">
+          <ProgressBar progress={progress} />
+          <div className="bg-blue-500 w-2"></div>
+        </div>
+        <Container>
+          <div className="flex p-2">
+            <div className="flex-grow">
+              <div className="text-mb font-bold leading-none mb-1">{title}</div>
+              <div className="text-sm text-gray-600">{evalutionTitle}</div>
+            </div>
+            <div className="w-10 h-10 flex items-center justify-center">
+              <Score isFixed={progress === 1}>{score}</Score>
             </div>
           </div>
+        </Container>
+      </About>
+      <Container>
+        <table className="w-full table-fixed border-collapse mb-4">
+          <thead>
+            <tr>
+              <th className="font-normal text-sm w-20 p-1 border-b-2">スコア</th>
+              <th className="font-normal text-sm w-full p-1 border-b-2">評価</th>
+            </tr>
+          </thead>
+          <tbody>
+          {evalutions.map(({ value, operator, content }, index) => (
+            <Evalution key={index} className="broder-b" isFixed={evalutionIndex >= 0} isSelected={index === evalutionIndex}>
+              <td className="border-b p-1 px-2 text-center">
+                <span className="text-xs mr-1">{operatorToSymbol(operator)}</span>
+                <span>{value}</span>
+              </td>
+              <td className="border-b p-1 px-2 text-right">{content}</td>
+            </Evalution>
+          ))}
+          </tbody>
+        </table>
+        <div className="p-2">
+          <button onClick={retrtHandler} className="p-2 rounded bg-gray-100 text-gray-600 w-full">やり直す</button>
         </div>
-        <div className="pl-4 border-b pb-4 mb-4">
-          <button className="text-xl w-full mb-3 flex items-center pr-2" onClick={() => setIsOpenBreakdown(!isOpenBreakdown)}>
-            <div className="flex-grow text-left">内訳</div>
-            <div className="w-8 h-8 flex items-center justify-center text-gray-800">
-              {isOpenBreakdown ? <Icons.ChevronUp/> : <Icons.ChevronDown/>}
-            </div>
-          </button>
-          {isOpenBreakdown && (
-            <div className="pl-2">
-              {calculator.inputs.map((input, iIndex) => (
-                <div key={iIndex} className="border-b mb-2 py-1 px-4">
-                  <div className="mb-2">{input.label}</div>
-                  <div className="pl-2">
-                    {input.options.map((option, oIndex) => (
-                      <div key={oIndex} className={`flex py-1 ${oIndex === +inputs[iIndex] ? 'text-sm' : 'text-xs text-gray-400'}`}>
-                        <div className="flex-grow">{option.label} {option.note && (<span>({option.note})</span>)}</div>
-                        <div>{option.score}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-              <div className="border-b mb-2 py-1 px-4">
-                <div className="mb-2">スコア</div>
-                <div className="pl-2 text-right">{score}</div>
-              </div>
-              <div className="border-b mb-2 py-1 px-4">
-                <div className="mb-2">結果</div>
-                <div className="pl-2">
-                  {calculator.qualities.map((q, qIndex) => (
-                    <div key={qIndex} className={`flex py-1 flex ${quality === q ? '' : 'text-xs text-gray-400'}`}>
-                      <div className="w-12 text-center">
-                        <span className="text-xs">{operatorToSymbol(q.operator)}</span> {q.value}
-                      </div>
-                      <div className="flex-grow text-right">{q.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+        <div className="py-4">
+          <div className="px-2 mb-2 text-gray-800">参考文献</div>
+          <ul className="pl-4">
+            {references && references.map(({ title, url }, index) => (
+              <li key={index}>
+                <a
+                  className="text-blue-500 text-xs pr-2"
+                  href={url} rel="noreferrer" target="_blank">{title}</a>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      </Container>
     </>
   )
 }
 
 export default Result
-
-/*
-<div className="fixed inset-0 bg-white">
-      <div className="max-w-2xl mx-auto pt-4">
-        <div className="px-4 mb-4">
-          <div className="text-lg text-left mb-2">PHASES scores</div>
-          <div className="text-xl text-right mb-2">7</div>
-        </div>
-        <div className="px-4 mb-4">
-          <div className="text-lg text-left mb-2">５年間破裂リスク</div>
-          <div className="text-xl text-right mb-2">2.4％</div>
-        </div>
-        <div>
-          {Array.from({ length: 10 }).fill(null).map((_, key) => (
-            <div key={key} className="py-2 mb-4">
-              <div className="flex items-start px-4 justify-between text-lg mb-2">
-                <div className="">人種</div>
-              </div>
-              <div className="mx-2 pl-6">
-                <div className="flex justify-between py-1 border-b mb-1 px-2 text-xs text-gray-400">
-                  <div className="flex-grow">北米 or 欧州</div><div>0</div>
-                </div>
-                <div className="flex justify-between py-1 border-b mb-1 px-2">
-                  <div className="flex-grow">日本</div><div>3</div>
-                </div>
-                <div className="flex justify-between py-1 border-b mb-1 px-2 text-xs text-gray-400">
-                  <div className="flex-grow">フィンランド</div><div>7</div>
-                </div>
-              </div>
-            </div>
-          ))}
-          <div className="py-2 mb-4">
-            <div className="flex items-start px-4 justify-between text-lg mb-2">
-              <div className="">PHASES scores</div>
-            </div>
-            <div className="mx-2 pl-6">
-              <div className="flex justify-between py-1 border-b mb-1 px-2 text-xs text-gray-400">
-                <div className="flex-grow">1</div><div>0.02%</div>
-              </div>
-              <div className="flex justify-between py-1 border-b mb-1 px-2 text-xs text-gray-400">
-                <div className="flex-grow">2</div><div>0.09%</div>
-              </div>
-              <div className="flex justify-between py-1 border-b mb-1 px-2 text-xs text-gray-400">
-                <div className="flex-grow">3</div><div>0.16%</div>
-              </div>
-              <div className="flex justify-between py-1 border-b mb-1 px-2 text-xs text-gray-400">
-                <div className="flex-grow">4</div><div>0.23%</div>
-              </div>
-              <div className="flex justify-between py-1 border-b mb-1 px-2">
-                <div className="flex-grow">5</div><div>0.30%</div>
-              </div>
-              <div className="flex justify-between py-1 border-b mb-1 px-2 text-xs text-gray-400">
-                <div className="flex-grow">6</div><div>0.37%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-*/

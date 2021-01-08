@@ -2,14 +2,14 @@ export const calculators = {
   1: {
     id: 1,
     title: 'PHASES scores',
-    qualityTitle: '5年間破裂リスク(%)',
+    evalutionTitle: '5年間破裂リスク(%)',
     references: [
       {
         title: '脳神経外科速報 2021年1月号(第31巻1号)特集:特集:脳血管内治療 専門医への道 3 ─知と技を兼ね備えた専門医へ',
         url: 'https://www.amazon.co.jp/%E8%84%B3%E7%A5%9E%E7%B5%8C%E5%A4%96%E7%A7%91%E9%80%9F%E5%A0%B1-2021%E5%B9%B41%E6%9C%88%E5%8F%B7-%E7%AC%AC31%E5%B7%BB1%E5%8F%B7-%E7%89%B9%E9%9B%86/dp/4840473404'
       }
     ],
-    inputs: [{
+    factors: [{
       label: '人種',
       options: [{
         label: '北欧 or 欧州',
@@ -83,52 +83,52 @@ export const calculators = {
         score: 0
       }, {
         label: 'あり',
-        score: 0
+        score: 1
       }]
     }
     ],
-    qualities: [{
-      label: '0.4',
+    evalutions: [{
+      content: '0.4',
       value: 2,
       operator: 'less than or equal'
     }, {
-      label: '0.7',
+      content: '0.7',
       value: 3,
       operator: 'equal'
     }, {
-      label: '0.9',
+      content: '0.9',
       value: 4,
       operator: 'equal'
     }, {
-      label: '1.3',
+      content: '1.3',
       value: 5,
       operator: 'equal'
     }, {
-      label: '1.7',
+      content: '1.7',
       value: 6,
       operator: 'equal'
     }, {
-      label: '2.4',
+      content: '2.4',
       value: 7,
       operator: 'equal'
     }, {
-      label: '3.2',
+      content: '3.2',
       value: 8,
       operator: 'equal'
     }, {
-      label: '4.3',
+      content: '4.3',
       value: 9,
       operator: 'equal'
     }, {
-      label: '5.3',
+      content: '5.3',
       value: 10,
       operator: 'equal'
     }, {
-      label: '7.2',
+      content: '7.2',
       value: 11,
       operator: 'equal'
     }, {
-      label: '17.8',
+      content: '17.8',
       value: 12,
       operator: 'greater than or equal'
     }]
@@ -136,14 +136,14 @@ export const calculators = {
   2: {
     id: 2,
     title: 'UCAS Prediction model risk scores',
-    qualityTitle: '3年間破裂リスク(%)',
+    evalutionTitle: '3年間破裂リスク(%)',
     references: [
       {
         title: '脳神経外科速報 2021年1月号(第31巻1号)特集:特集:脳血管内治療 専門医への道 3 ─知と技を兼ね備えた専門医へ',
         url: 'https://www.amazon.co.jp/%E8%84%B3%E7%A5%9E%E7%B5%8C%E5%A4%96%E7%A7%91%E9%80%9F%E5%A0%B1-2021%E5%B9%B41%E6%9C%88%E5%8F%B7-%E7%AC%AC31%E5%B7%BB1%E5%8F%B7-%E7%89%B9%E9%9B%86/dp/4840473404'
       }
     ],
-    inputs: [{
+    factors: [{
       label: '年齢',
       options: [{
         label: '< 70歳',
@@ -217,44 +217,44 @@ export const calculators = {
         score: 1
       }]
     }],
-    qualities: [{
-      label: '0.2',
+    evalutions: [{
+      content: '0.2',
       value: 0,
       operator: 'equal'
     }, {
-      label: '0.4',
+      content: '0.4',
       value: 1,
       operator: 'equal'
     }, {
-      label: '0.6',
+      content: '0.6',
       value: 2,
       operator: 'equal'
     }, {
-      label: '0.9',
+      content: '0.9',
       value: 3,
       operator: 'equal'
     }, {
-      label: '1.4',
+      content: '1.4',
       value: 4,
       operator: 'equal'
     }, {
-      label: '2.3',
+      content: '2.3',
       value: 5,
       operator: 'equal'
     }, {
-      label: '3.7',
+      content: '3.7',
       value: 6,
       operator: 'equal'
     }, {
-      label: '5.7',
+      content: '5.7',
       value: 7,
       operator: 'equal'
     }, {
-      label: '7.6',
+      content: '7.6',
       value: 8,
       operator: 'equal'
     }, {
-      label: '17',
+      content: '17',
       value: 9,
       operator: 'greater than or equal'
     }]

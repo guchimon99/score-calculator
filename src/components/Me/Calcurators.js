@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import Link from '../Link'
+
 import { useCalculators } from '../../hooks/entities'
 
 const Calcurators = () => {

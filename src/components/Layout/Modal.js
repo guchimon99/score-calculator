@@ -1,18 +1,22 @@
-import { Link } from 'react-router-dom'
 import * as Icons from 'react-feather'
 
-const Modal = ({ children, ...props }) => (
+import Link from '../Link'
+
+import { TopBar } from './Bar'
+import Container from './Container'
+
+const Modal = ({ children }) => (
   <>
-    <div className="max-w-2xl mx-auto px-4 py-12 min-h-screen">
+    <Container className="py-12">
       {children}
-    </div>
-    <div className="fixed top-0 left-0 right-0 border-b bg-white">
-      <div className="max-w-2xl mx-auto">
-        <Link to="/" className="p-2 block">
+    </Container>
+    <TopBar>
+      <Container className="flex items-strech h-full">
+        <Link to="/" className="p-2 flex items-center justify-center">
           <Icons.X />
         </Link>
-      </div>
-    </div>
+      </Container>
+    </TopBar>
   </>
 )
 
