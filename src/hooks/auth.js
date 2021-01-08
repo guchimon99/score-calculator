@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useContext } from 'react'
+import { useMemo, createContext, useReducer, useEffect, useContext } from 'react'
 
 import firebase from '../firebase'
 
@@ -24,11 +24,13 @@ export const Provider = props => {
 }
 
 export const useIsReady = () => {
-  const [{ isReady }] = useContext(Context)
-  return isReady
+  const [state] = useContext(Context)
+
+  return useMemo(() => state.isReady, [state.isReady])
 }
 
 export const useCurrentUser = () => {
-  const [{ currentUser }] = useContext(Context)
-  return currentUser
+  const [state] = useContext(Context)
+
+  return useMemo(() => state.currentUser, [state.currentUser])
 }
