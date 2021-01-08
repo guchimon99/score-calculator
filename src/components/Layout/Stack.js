@@ -3,7 +3,7 @@ import * as Icons from 'react-feather'
 import Container from './Container'
 import Link from '../Link'
 
-const Compose = ({ parent, title, children }) => {
+const Stack = ({ parent, title, children }) => {
   return (
     <>
       <Container>
@@ -21,4 +21,4 @@ const Compose = ({ parent, title, children }) => {
   )
 }
 
-export default Compose
+export default Stack

@@ -4,7 +4,7 @@ import { useFactor } from '../../../hooks/entities'
 import Form, { Label, Group, Input } from '../../Form'
 import Section from '../../Section'
 import LinkList, { Item as LinkListItem, AddButton } from '../../LinkList'
-import EditorLayout from '../../Layout/Editor'
+import StackLayout from '../../Layout/Stack'
 
 const Factor = ({
   match: {
@@ -18,7 +18,7 @@ const Factor = ({
   // const updateFactor = useUpdateFactor(calculatorId, factorIndex)
 
   return (
-    <EditorLayout title="入力項目" parent={`/editor/calculators/${calculatorId}`}>
+    <StackLayout title="入力項目" parent={`/editor/calculators/${calculatorId}`}>
       <Form>
         <Group>
           <Label>名称</Label>
@@ -40,7 +40,7 @@ const Factor = ({
         </LinkList>
         </Section>
       </Group>
-    </EditorLayout>
+    </StackLayout>
   )
 }
 

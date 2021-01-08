@@ -3,7 +3,7 @@ import { useReference } from '../../../hooks/entities'
 // import { useUpdateReference } from '../../../hooks/editor/calculator'
 
 import Form, { Label, Group, Input } from '../../Form'
-import EditorLayout from '../../Layout/Editor'
+import StackLayout from '../../Layout/Stack'
 
 const Reference = ({
   match: {
@@ -17,7 +17,7 @@ const Reference = ({
   // const updateReference = useUpdateReference(calculatorId, referenceIndex)
 
   return (
-    <EditorLayout title="評価の編集" parent={`/editor/calculators/${calculatorId}`}>
+    <StackLayout title="評価の編集" parent={`/editor/calculators/${calculatorId}`}>
       <Form>
         <Group>
           <Label>名称</Label>
@@ -28,7 +28,7 @@ const Reference = ({
           <Input name="url" defaultValue={url} />
         </Group>
       </Form>
-    </EditorLayout>
+    </StackLayout>
   )
 }
 

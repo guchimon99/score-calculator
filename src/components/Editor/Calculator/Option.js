@@ -3,7 +3,7 @@ import { useOption } from '../../../hooks/entities'
 // import { useUpdateOption } from '../../../hooks/editor/calculator'
 
 import Form, { Label, Group, Input } from '../../Form'
-import EditorLayout from '../../Layout/Editor'
+import StackLayout from '../../Layout/Stack'
 
 const Option = ({
   match: {
@@ -18,7 +18,7 @@ const Option = ({
   // const updateOption = useUpdateOption(calculatorId, optionIndex)
 
   return (
-    <EditorLayout title="選択肢の編集" parent={`/editor/calculators/${calculatorId}/factors/${factorIndex}`}>
+    <StackLayout title="選択肢の編集" parent={`/editor/calculators/${calculatorId}/factors/${factorIndex}`}>
       <Form>
         <Group>
           <Label>名称</Label>
@@ -33,7 +33,7 @@ const Option = ({
           <Input type="text" name="note" defaultValue={note} />
         </Group>
       </Form>
-    </EditorLayout>
+    </StackLayout>
   )
 }
 

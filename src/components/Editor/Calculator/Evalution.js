@@ -4,7 +4,7 @@ import { useEvalution } from '../../../hooks/entities'
 // import { useUpdateEvalution } from '../../../hooks/editor/calculator'
 
 import Form, { Label, Group, Input, Select } from '../../Form'
-import EditorLayout from '../../Layout/Editor'
+import StackLayout from '../../Layout/Stack'
 
 const operatorOptions = [
   'less',
@@ -26,7 +26,7 @@ const Evalution = ({
   // const updateEvalution = useUpdateEvalution(calculatorId, evalutionIndex)
 
   return (
-    <EditorLayout title="評価の編集" parent={`/editor/calculators/${calculatorId}`}>
+    <StackLayout title="評価の編集" parent={`/editor/calculators/${calculatorId}`}>
       <Form>
         <Group>
           <Label>内容</Label>
@@ -44,7 +44,7 @@ const Evalution = ({
           </div>
         </Group>
       </Form>
-    </EditorLayout>
+    </StackLayout>
   )
 }
 

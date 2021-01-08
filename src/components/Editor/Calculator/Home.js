@@ -3,7 +3,7 @@ import { useCalculator } from '../../../hooks/entities'
 import Form, { Label, Group, Input } from '../../Form'
 import Section from '../../Section'
 import LinkList, { Item as LinkListItem, AddButton } from '../../LinkList'
-import EditorLayout from '../../Layout/Editor'
+import StackLayout from '../../Layout/Stack'
 
 const Home = ({
   match: {
@@ -21,7 +21,7 @@ const Home = ({
   } = useCalculator(calculatorId)
 
   return (
-    <EditorLayout title="計算機の編集" parent={`/calculators/${calculatorId}/info`}>
+    <StackLayout title="計算機の編集" parent={`/calculators/${calculatorId}/info`}>
       <Form>
         <Group>
           <Label>名称</Label>
@@ -77,7 +77,7 @@ const Home = ({
           </LinkList>
         </Section>
       </Group>
-    </EditorLayout>
+    </StackLayout>
   )
 }
 
