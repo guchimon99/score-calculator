@@ -1,22 +1,19 @@
 import * as Icons from 'react-feather'
 
+import { useAllCalculators, useCreateCalculator } from '../../hooks/calculators'
+
 import Section from '../Section'
 import Title from '../Title'
 import LinkList, { Item as LinkListItem } from '../LinkList'
-import { useCalculators } from '../../hooks/entities'
-import { useCallback } from 'react'
 
 const Home = () => {
-  const calculators = useCalculators()
-
-  const createHandler = useCallback(() => {
-    console.log('create')
-  }, [])
+  const calculators = useAllCalculators()
+  const createCalculator = useCreateCalculator()
 
   return (
     <>
       <div className="flex justify-end pt-1">
-        <button className="text-blue-500 p-2" onClick={createHandler}>
+        <button className="text-blue-500 p-2" onClick={createCalculator}>
           <Icons.Plus />
         </button>
       </div>

@@ -1,15 +1,14 @@
 export const initialArg = {
-  isReady: false,
-  currentUser: null
+
 }
 
 export const reducer = (state, [type, payload]) => {
   switch (type) {
-    case 'SET_CURRENT_USER': {
-      const { currentUser } = payload
+    case 'SET_CALCULATOR': {
+      const { calculator } = payload
       return {
-        isReady: true,
-        currentUser
+        ...state,
+        [calculator.id]: calculator
       }
     }
     default:

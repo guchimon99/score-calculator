@@ -1,5 +1,5 @@
 
-import { useOption } from '../../../hooks/entities'
+import { useOption } from '../../../hooks/calculator'
 // import { useUpdateOption } from '../../../hooks/editor/calculator'
 
 import Form, { Label, Group, Input } from '../../Form'
@@ -14,7 +14,7 @@ const Option = ({
     }
   }
 }) => {
-  const { label, score, note } = useOption(calculatorId, factorIndex, optionIndex)
+  const { label, score, note } = useOption(factorIndex, optionIndex)
   // const updateOption = useUpdateOption(calculatorId, optionIndex)
 
   return (

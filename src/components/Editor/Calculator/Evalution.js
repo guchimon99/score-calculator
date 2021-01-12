@@ -1,6 +1,6 @@
 import { operatorToSymbolForSelect } from '../../../services/calcurator'
 
-import { useEvalution } from '../../../hooks/entities'
+import { useEvalution } from '../../../hooks/calculator'
 // import { useUpdateEvalution } from '../../../hooks/editor/calculator'
 
 import Form, { Label, Group, Input, Select } from '../../Form'
@@ -22,7 +22,7 @@ const Evalution = ({
     }
   }
 }) => {
-  const { value, operator, content } = useEvalution(calculatorId, evalutionIndex)
+  const { value, operator, content } = useEvalution(evalutionIndex)
   // const updateEvalution = useUpdateEvalution(calculatorId, evalutionIndex)
 
   return (

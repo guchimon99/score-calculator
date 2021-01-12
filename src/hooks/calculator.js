@@ -1,58 +1,60 @@
-import { useMemo, useReducer, createContext, useEffect, useContext, useCallback } from 'react'
+import { useMemo, createContext, useEffect, useContext, useCallback, useReducer } from 'react'
 
-import { reducer, initializerArg } from '../reducers/calculator'
+import { getScore, getEvalutionIndex, getEmptyValues } from '../services/calcurator'
+
+import { reducer, initialArg } from '../reducers/calculator'
+
+import { useCalculator } from './calculators'
 
 export const Context = createContext()
 
-export const Provider = ({ calculator, ...props }) => {
-  const [state, dispatch] = useReducer(reducer, initializerArg)
+export const Provider = ({ calculatorId, ...props }) => {
+  const [state, dispatch] = useReducer(reducer, initialArg)
+  const calculator = useCalculator(calculatorId)
 
   useEffect(() => {
-    dispatch({ type: 'SET_CALCULATOR', payload: { calculator } })
+    if (!calculator) return null
+    dispatch(['INIT', {
+      calculatorId,
+      values: getEmptyValues(calculator)
+    }])
   }, [calculator])
+
+  if (!calculator || !state.values) return null
 
   return <Context.Provider value={[state, dispatch]} {...props} />
 }
 
-export const useCalculator = () => {
-  const [{ calculator }] = useContext(Context)
-  return useMemo(() => calculator, [calculator])
+export const useCurrentCalculator = () => {
+  const [{ calculatorId }] = useContext(Context)
+  const calculator = useCalculator(calculatorId)
+
+  return calculator
 }
 
-export const useTitle = () => {
-  const calculator = useCalculator()
-  return useMemo(() => calculator && calculator.title, [calculator])
+export const useFactor = factorIndex => {
+  const { factors } = useCurrentCalculator()
+  return useMemo(() => factors[factorIndex], [factors, factorIndex])
 }
 
-export const useEvalutionTitle = () => {
-  const calculator = useCalculator()
-  return useMemo(() => calculator && calculator.evalutionTitle, [calculator])
+export const useOption = (factorIndex, optionIndex) => {
+  const { options } = useFactor(factorIndex)
+  return useMemo(() => options[optionIndex], [options, optionIndex])
 }
 
-export const useCalculatorId = () => {
-  const calculator = useCalculator()
-  return useMemo(() => calculator && calculator.id, [calculator])
+export const useEvalution = evalutionIndex => {
+  const { evalutions } = useCurrentCalculator()
+  return useMemo(() => evalutions[evalutionIndex], [evalutions, evalutionIndex])
 }
 
-export const useFactors = () => {
-  const calculator = useCalculator()
-
-  return useMemo(() => calculator ? calculator.factors : [], [calculator])
+export const useReference = referenceIndex => {
+  const { references } = useCurrentCalculator()
+  return useMemo(() => references[referenceIndex], [references, referenceIndex])
 }
 
-export const useEvalutions = () => {
-  const calculator = useCalculator()
-  return useMemo(() => calculator ? calculator.evalutions : [], [calculator])
-}
-
-export const useReferences = () => {
-  const calculator = useCalculator()
-  return useMemo(() => calculator ? calculator.references : [], [calculator])
-}
-
-export const useEvolutions = () => {
-  const calculator = useCalculator()
-  return useMemo(() => calculator && calculator.evolutions, [calculator])
+export const useValues = () => {
+  const [{ values }] = useContext(Context)
+  return useMemo(() => values, [values])
 }
 
 export const useValue = factorIndex => {
@@ -74,19 +76,9 @@ export const useIsSelectedOption = (factorIndex, optionIndex) => {
 export const useSetValue = factorIndex => {
   const [, dispatch] = useContext(Context)
   const setValue = useCallback(optionIndex => {
-    dispatch({
-      type: 'SET_VALUE',
-      payload: {
-        factorIndex, optionIndex
-      }
-    })
-  }, [])
+    dispatch(['SET_VALUE', { factorIndex, optionIndex }])
+  }, [factorIndex])
   return setValue
-}
-
-export const useValues = () => {
-  const [{ values }] = useContext(Context)
-  return values
 }
 
 export const useProgress = () => {
@@ -95,47 +87,24 @@ export const useProgress = () => {
 }
 
 export const useScore = () => {
-  const factors = useFactors()
+  const calculator = useCurrentCalculator()
   const values = useValues()
-  const score = useMemo(() => factors.reduce((score, factor, index) => {
-    const option = factor.options[values[index]]
-    return option ? option.score + score : score
-  }, 0), [factors, values])
 
-  return score
+  return useMemo(() => getScore(calculator, values), [calculator, values])
 }
 
 export const useEvalutionIndex = () => {
+  const calculator = useCurrentCalculator()
   const values = useValues()
-  const evalutions = useEvalutions()
-  const score = useScore()
 
-  return useMemo(() => {
-    if (values.some(value => value === null)) return -1
-
-    return evalutions.findIndex(({ operator, value }) => {
-      switch (operator) {
-        case 'less':
-          return score < value
-        case 'less than or equal':
-          return score <= value
-        case 'equal':
-          return score === value
-        case 'greater than or equal':
-          return score >= value
-        case 'greater':
-          return score > value
-        default:
-          return false
-      }
-    })
-  }, [values, score, evalutions])
+  return useMemo(() => getEvalutionIndex(calculator, values), [calculator, values])
 }
 
 export const useResetValues = () => {
   const [, dispatch] = useContext(Context)
-  const resetValues = useCallback(() => {
-    dispatch({ type: 'RESET_VALUES' })
-  }, [])
-  return resetValues
+  const values = useValues()
+
+  return useCallback(() => {
+    dispatch(['RESET', { values: values.map(() => null) }])
+  }, [values])
 }

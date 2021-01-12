@@ -1,36 +1,68 @@
-import { useMemo, createContext, useReducer, useEffect, useContext } from 'react'
+import { useMemo, createContext, useReducer, useEffect, useContext, useCallback } from 'react'
+
+import { calculators } from '../data'
+
+import { reducer, initialArg } from '../reducers/auth'
 
 import firebase from '../firebase'
 
-import { reducer, initializerArg } from '../reducers/auth'
-
-export const Context = createContext()
+const Context = createContext()
 
 export const Provider = props => {
-  const [state, dispatch] = useReducer(reducer, initializerArg)
+  const [state, dispatch] = useReducer(reducer, initialArg)
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(async currentUser => {
-      if (!currentUser) {
-        firebase.auth().signInAnonymously()
-        return
-      }
+    const unsubscribe = firebase.auth().onAuthStateChanged(async currentUser => {
+      dispatch(['SET_CURRENT_USER', { currentUser }])
 
-      dispatch({ type: 'SET_CURRENT_USER', payload: { currentUser } })
+      if (!currentUser) {
+        const credential = await firebase.auth().signInAnonymously()
+        const uid = credential.user.uid
+        await firebase.firestore().doc(`/users/${uid}`).set({
+          displayName: uid,
+          createdAt: new Date()
+        })
+
+        for (const calculator of calculators) {
+          await firebase.firestore().collection(`/users/${uid}/calculators`).add(calculator)
+        }
+      }
     })
+
+    return unsubscribe
   }, [])
 
-  return <Context.Provider value={[state, dispatch]} {...props} />
+  if (!state.currentUser) return null
+
+  return <Context.Provider value={state} {...props} />
 }
 
 export const useIsReady = () => {
-  const [state] = useContext(Context)
+  const { isReady } = useContext(Context)
 
-  return useMemo(() => state.isReady, [state.isReady])
+  return useMemo(() => isReady, [isReady])
 }
 
 export const useCurrentUser = () => {
-  const [state] = useContext(Context)
+  const { currentUser } = useContext(Context)
 
-  return useMemo(() => state.currentUser, [state.currentUser])
+  return useMemo(() => currentUser, [currentUser])
+}
+
+export const useUid = () => {
+  const currentUser = useCurrentUser()
+
+  return useMemo(() => currentUser && currentUser.uid, [currentUser])
+}
+
+const signOutMessage = 'サインアウトすると作成した計算機を永久に失いますがよろしいですか？'
+
+export const useSignOut = () => {
+  const signOut = useCallback(() => {
+    if (!window.confirm(signOutMessage)) return
+
+    firebase.auth().signOut()
+  }, [])
+
+  return signOut
 }

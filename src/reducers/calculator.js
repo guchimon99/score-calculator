@@ -1,21 +1,18 @@
-export const initializerArg = {
-  calculator: null,
-  values: []
+export const initialArg = {
+  calculatorId: null,
+  values: null
 }
 
-export const reducer = (state, action) => {
-  switch (action.type) {
-    case 'SET_CALCULATOR': {
-      const { calculator } = action.payload
-      const values = calculator.factors.map(() => null)
+export const reducer = (state, [type, payload]) => {
+  switch (type) {
+    case 'INIT': {
+      const { calculatorId, values } = payload
       return {
-        ...state,
-        calculator,
-        values
+        calculatorId, values
       }
     }
     case 'SET_VALUE': {
-      const { factorIndex, optionIndex } = action.payload
+      const { factorIndex, optionIndex } = payload
       const values = [...state.values]
       values[factorIndex] = optionIndex
       return {
@@ -23,11 +20,11 @@ export const reducer = (state, action) => {
         values
       }
     }
-    case 'RESET_VALUES': {
-      const { calculator } = state
+    case 'RESET': {
+      const { values } = payload
       return {
         ...state,
-        values: calculator.factors.map(() => null)
+        values
       }
     }
     default:

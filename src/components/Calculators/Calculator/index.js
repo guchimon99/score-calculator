@@ -1,5 +1,3 @@
-import { useCalculator } from '../../../hooks/entities'
-
 import { Provider } from '../../../hooks/calculator'
 
 import Header from './Header'
@@ -13,10 +11,8 @@ const Calculator = ({
     }
   }
 }) => {
-  const calculator = useCalculator(calculatorId)
-
   return (
-    <Provider calculator={calculator}>
+    <Provider calculatorId={calculatorId}>
       <Header />
       <Factors />
       <Result />

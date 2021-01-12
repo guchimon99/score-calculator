@@ -1,4 +1,4 @@
-import { useFactor } from '../../../hooks/entities'
+import { useFactor } from '../../../hooks/calculator'
 // import { useUpdateFactor } from '../../../hooks/editor/calculator'
 
 import Form, { Label, Group, Input } from '../../Form'
@@ -14,7 +14,7 @@ const Factor = ({
     }
   }
 }) => {
-  const { label, options } = useFactor(calculatorId, factorIndex)
+  const { label, options } = useFactor(factorIndex)
   // const updateFactor = useUpdateFactor(calculatorId, factorIndex)
 
   return (

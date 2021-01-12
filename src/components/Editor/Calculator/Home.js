@@ -1,4 +1,4 @@
-import { useCalculator } from '../../../hooks/entities'
+import { useCalculator } from '../../../hooks/calculators'
 
 import Form, { Label, Group, Input } from '../../Form'
 import Section from '../../Section'

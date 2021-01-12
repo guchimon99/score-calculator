@@ -3,14 +3,11 @@ import styled from 'styled-components'
 import { operatorToSymbol } from '../../../services/calcurator'
 
 import {
-  useTitle,
-  useEvalutionTitle,
-  useEvalutions,
-  useReferences,
   useScore,
   useProgress,
   useEvalutionIndex,
-  useResetValues
+  useResetValues,
+  useCurrentCalculator
 } from '../../../hooks/calculator'
 
 import Container from '../../Layout/Container'
@@ -68,13 +65,17 @@ const Evalution = styled.tr.attrs(({ isFixed, isSelected }) => {
 `
 
 const Result = () => {
-  const title = useTitle()
-  const evalutionTitle = useEvalutionTitle()
-  const evalutions = useEvalutions()
-  const references = useReferences()
+  const {
+    title,
+    evalutionTitle,
+    evalutions,
+    references
+  } = useCurrentCalculator()
+
   const progress = useProgress()
   const evalutionIndex = useEvalutionIndex()
   const score = useScore()
+
   const resetValues = useResetValues()
 
   const retrtHandler = useCallback(() => {
@@ -119,6 +120,15 @@ const Result = () => {
               <td className="border-b p-1 px-2 text-right">{content}</td>
             </Evalution>
           ))}
+          {evalutions.length === 0 && (
+            <tr>
+              <td colSpan={2} className="border-b text-lg py-8 text-center">
+                <div className="text-gray-300 text-lg font-bold py-8">
+                  この計算機には評価がありません
+                </div>
+              </td>
+            </tr>
+          )}
           </tbody>
         </table>
         <div className="p-2">
@@ -127,7 +137,7 @@ const Result = () => {
         <div className="py-4">
           <div className="px-2 mb-2 text-gray-800">参考文献</div>
           <ul className="pl-4">
-            {references && references.map(({ title, url }, index) => (
+            {references.map(({ title, url }, index) => (
               <li key={index}>
                 <a
                   className="text-blue-500 text-xs pr-2"
@@ -135,6 +145,11 @@ const Result = () => {
               </li>
             ))}
           </ul>
+          {references.length === 0 && (
+            <div className="text-center text-lg text-py font-bold text-gray-300">
+              この計算機には参考文献がありません。
+            </div>
+          )}
         </div>
       </Container>
     </>

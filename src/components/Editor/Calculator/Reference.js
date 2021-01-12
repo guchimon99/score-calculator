@@ -1,5 +1,5 @@
 
-import { useReference } from '../../../hooks/entities'
+import { useReference } from '../../../hooks/calculator'
 // import { useUpdateReference } from '../../../hooks/editor/calculator'
 
 import Form, { Label, Group, Input } from '../../Form'
@@ -13,7 +13,7 @@ const Reference = ({
     }
   }
 }) => {
-  const { title, url } = useReference(calculatorId, referenceIndex)
+  const { title, url } = useReference(referenceIndex)
   // const updateReference = useUpdateReference(calculatorId, referenceIndex)
 
   return (

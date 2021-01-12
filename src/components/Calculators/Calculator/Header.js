@@ -1,12 +1,12 @@
 import * as Icons from 'react-feather'
 
-import { useCalculatorId } from '../../../hooks/calculator'
+import { useCurrentCalculator } from '../../../hooks/calculator'
 
 import Container from '../../Layout/Container'
 import Link from '../../Link'
 
 const Header = () => {
-  const calculatorId = useCalculatorId()
+  const { id } = useCurrentCalculator()
 
   return (
     <Container>
@@ -14,7 +14,7 @@ const Header = () => {
         <Link to="/" className="w-12 h-12 flex justify-center items-center text-blue-500">
           <Icons.X />
         </Link>
-        <Link to={calculatorId && `/editor/calculators/${calculatorId}`} className="w-12 h-12 flex justify-center items-center text-blue-500">
+        <Link to={`/editor/calculators/${id}`} className="w-12 h-12 flex justify-center items-center text-blue-500">
           <Icons.Edit />
         </Link>
       </div>
