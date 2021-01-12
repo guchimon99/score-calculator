@@ -34,7 +34,7 @@ export const useAddReference = () => {
         }
       ]
     })
-  })
+  }, [calculator.references])
 }
 
 export const useAddFactor = () => {
@@ -52,7 +52,7 @@ export const useAddFactor = () => {
         }
       ]
     })
-  })
+  }, [calculator.factors])
 }
 
 export const useAddOption = factorIndex => {
@@ -71,7 +71,7 @@ export const useAddOption = factorIndex => {
     ]
 
     update({ factors })
-  })
+  }, [calculator.factors[factorIndex].options])
 }
 
 export const useAddEvalution = () => {
@@ -89,7 +89,7 @@ export const useAddEvalution = () => {
         }
       ]
     })
-  })
+  }, [calculator.evalutions])
 }
 
 export const useUpdateFactor = (factorIndex) => {
