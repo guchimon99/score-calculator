@@ -3,12 +3,14 @@ import styled from 'styled-components'
 import { operatorToSymbol } from '../../../services/calcurator'
 
 import {
+  useCurrentCalculator
+} from '../../../hooks/calculator'
+import {
   useScore,
   useProgress,
   useEvalutionIndex,
-  useResetValues,
-  useCurrentCalculator
-} from '../../../hooks/calculator'
+  useResetValues
+} from '../../../hooks/calculate'
 
 import Container from '../../Layout/Container'
 import { useCallback } from 'react'

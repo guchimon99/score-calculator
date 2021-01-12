@@ -11,6 +11,12 @@ export const reducer = (state, [type, payload]) => {
         [calculator.id]: calculator
       }
     }
+    case 'UNSET_CALCULATOR': {
+      const newState = { ...state }
+      const { calculatorId } = payload
+      delete newState[calculatorId]
+      return newState
+    }
     default:
       return state
   }

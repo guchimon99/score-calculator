@@ -1,4 +1,17 @@
-import { useCalculator } from '../../../hooks/calculators'
+import { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
+
+import {
+  useCurrentCalculator
+} from '../../../hooks/calculator'
+
+import {
+  useUpdate,
+  useAddReference,
+  useAddFactor,
+  useAddEvalution,
+  useDeleteCalculator
+} from '../../../hooks/editor/calculator'
 
 import Form, { Label, Group, Input } from '../../Form'
 import Section from '../../Section'
@@ -12,41 +25,46 @@ const Home = ({
     }
   }
 }) => {
+  const history = useHistory()
+
   const {
     title,
     evalutionTitle,
     factors,
     references,
     evalutions
-  } = useCalculator(calculatorId)
+  } = useCurrentCalculator()
+
+  const update = useUpdate()
+  const deleteCalculator = useDeleteCalculator()
+  const addReference = useAddReference()
+  const addFactor = useAddFactor()
+  const addEvalution = useAddEvalution()
+
+  const blurTitleHandler = useCallback(({ target: { value: title } }) => update({ title }), [])
+  const blurEvalutionTitleHandler = useCallback(({ target: { value: evalutionTitle } }) => update({ evalutionTitle }), [])
+
+  const addReferenceHandler = useCallback(() => addReference(), [])
+  const addFactorHandler = useCallback(() => addFactor(), [])
+  const addEvalutionHandler = useCallback(() => addEvalution(), [])
+
+  const deleteHandler = useCallback(() => {
+    deleteCalculator()
+    history.replace('/library')
+  })
 
   return (
     <StackLayout title="計算機の編集" parent={`/calculators/${calculatorId}/info`}>
       <Form>
         <Group>
           <Label>名称</Label>
-          <Input type="text" name="title" defaultValue={title} />
+          <Input type="text" name="title" defaultValue={title} onBlur={blurTitleHandler} />
         </Group>
         <Group>
           <Label>評価項目</Label>
-          <Input type="text" name="evalutionTitle" defaultValue={evalutionTitle} />
+          <Input type="text" name="evalutionTitle" defaultValue={evalutionTitle} onBlur={blurEvalutionTitleHandler} />
         </Group>
       </Form>
-      <Group>
-        <Label>参考文献</Label>
-        <Section>
-          <LinkList>
-            {references.map((reference, i) =>
-              <LinkListItem
-                key={i}
-                to={`/editor/calculators/${calculatorId}/references/${i}`}>
-                  {reference.title}
-              </LinkListItem>
-            )}
-            <AddButton>参考文献を追加する</AddButton>
-          </LinkList>
-        </Section>
-      </Group>
       <Group>
         <Label>入力項目</Label>
         <Section>
@@ -58,7 +76,7 @@ const Home = ({
                   {factor.label}
               </LinkListItem>
             )}
-            <AddButton>入力項目を追加する</AddButton>
+            <AddButton onClick={addFactorHandler}>入力項目を追加する</AddButton>
           </LinkList>
         </Section>
       </Group>
@@ -73,9 +91,27 @@ const Home = ({
                   {evalution.content}
               </LinkListItem>
             )}
-            <AddButton>評価を追加する</AddButton>
+            <AddButton onClick={addEvalutionHandler}>評価を追加する</AddButton>
           </LinkList>
         </Section>
+      </Group>
+      <Group>
+        <Label>参考文献</Label>
+        <Section>
+          <LinkList>
+            {references.map((reference, i) =>
+              <LinkListItem
+                key={i}
+                to={`/editor/calculators/${calculatorId}/references/${i}`}>
+                  {reference.title}
+              </LinkListItem>
+            )}
+            <AddButton onClick={addReferenceHandler}>参考文献を追加する</AddButton>
+          </LinkList>
+        </Section>
+      </Group>
+      <Group>
+        <button className="text-red-500 py-2 w-full" onClick={deleteHandler}>この計算機を削除する</button>
       </Group>
     </StackLayout>
   )

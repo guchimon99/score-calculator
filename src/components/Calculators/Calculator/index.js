@@ -1,4 +1,5 @@
-import { Provider } from '../../../hooks/calculator'
+import { Provider as CalculatorProvider } from '../../../hooks/calculator'
+import { Provider as CalculateProvider } from '../../../hooks/calculate'
 
 import Header from './Header'
 import Factors from './Factors'
@@ -12,11 +13,13 @@ const Calculator = ({
   }
 }) => {
   return (
-    <Provider calculatorId={calculatorId}>
-      <Header />
-      <Factors />
-      <Result />
-    </Provider>
+    <CalculatorProvider calculatorId={calculatorId}>
+      <CalculateProvider>
+        <Header />
+        <Factors />
+        <Result />
+      </CalculateProvider>
+    </CalculatorProvider>
   )
 }
 

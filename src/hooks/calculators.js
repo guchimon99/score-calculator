@@ -37,6 +37,12 @@ export const Provider = props => {
         }
         dispatch(['SET_CALCULATOR', { calculator }])
       })
+
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'removed') {
+          dispatch(['UNSET_CALCULATOR', { calculatorId: change.doc.id }])
+        }
+      })
     }, errorHandler)
 
     return unsubscribe
@@ -45,11 +51,12 @@ export const Provider = props => {
   return <Context.Provider value={state} {...props} />
 }
 
-export const useCalculator = (calculatorId) => {
+export const useCalculator = calculatorId => {
   const state = useContext(Context)
 
   return useMemo(() => {
-    return state[calculatorId] || null
+    const calculator = state[calculatorId] || null
+    return calculator
   }, [state, calculatorId])
 }
 

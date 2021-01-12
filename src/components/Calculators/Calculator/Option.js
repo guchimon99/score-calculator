@@ -6,7 +6,7 @@ import {
   useSetValue,
   useIsFixedFactor,
   useIsSelectedOption
-} from '../../../hooks/calculator'
+} from '../../../hooks/calculate'
 
 const OptionButton = styled.button.attrs(({ isSelectedOption, isFixedFactor }) => {
   const classNames = ['flex mb-1 items-center rounded p-2 w-full']
